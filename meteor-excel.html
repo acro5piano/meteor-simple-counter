@@ -1,0 +1,79 @@
+<head>
+  <title>counter</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <script type="text/javascript" src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=sunburst"> </script>
+</head>
+
+<body>
+
+  <div class="container">
+
+      <h1>Welcome to Counter!</h1>
+      
+      <div style="margin-top:30px" class="col-md-12">
+        <button class="btn btn-info">Click Me</button>
+        <span class="well">{{count.value}}</span>
+      </div>
+  
+      <h2 style="margin-top:100px">Code:</h2>
+      <div class="col-md-6">
+        <pre class="prettyprint">
+/*
+ * counter.js
+ */
+Counter = new Mongo.Collection("counter");
+
+if (Meteor.isClient) {
+
+  Template.body.helpers({
+    count : function () {
+       return Counter.findOne({});
+    }
+  });
+  
+  Template.body.events({
+    "click button" : function(){
+        var obj = Counter.findOne({});
+        console.log(obj);
+        Counter.update(obj._id,{
+            $set :{value : obj.value + 1 }
+        });
+    }
+  });
+}
+
+if (Meteor.isServer) {
+  Meteor.startup(function () {
+    // code to run on server at startup
+    Counter.remove({});
+    Counter.insert({
+      value:0,
+      createdAt: new Date()
+    });
+  });
+}
+
+
+        </pre>
+      </div>
+      <div class="col-md-6">
+        <pre class="prettyprint">
+/*
+ * counter.html
+ */
+&lt;head&gt;
+  &lt;title&gt;counter&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  &lt;h1&gt;Welcome to Counter!&lt;/h1&gt;
+  &lt;button class=&quot;btn btn-info&quot;&gt;Click Me&lt;/button&gt;
+  &lt;span class=&quot;well&quot;&gt;&#123;&#123;count.value&#125;&#125;&lt;/span&gt;
+&lt;/body&gt;
+        </pre>
+      </div>
+  </div>
+
+
+
+</body>
